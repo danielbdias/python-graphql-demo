@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  backend:
+    command: "sh start_app.sh"
+    image: python
+    working_dir: /project
+    volumes:
+      - ./backend:/project
+    links:
+      - mysql
+    ports:
+      - 5000:5000
+
+  graphiql:
+    image: merapar/graphql-browser-docker
+    environment:
+      - GRAPHQL_SERVER=http://localhost:5000/graphql
+    links:
+      - backend
+    ports:
+      - 8080:8080
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=sampleuser
+      - MYSQL_PASSWORD=sampleuserpassword
